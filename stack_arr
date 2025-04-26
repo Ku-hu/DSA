@@ -1,0 +1,92 @@
+#include <stdio.h>
+#define MAX 20
+
+struct stack
+{
+	int a[MAX];
+	int top;
+} s;
+
+void push(int x);
+void pop();
+void display();
+
+void push(int x)
+{
+	if(s.top!=MAX-1)
+	{
+		s.top+=1;
+		s.a[s.top]=x;
+		return;
+	}
+	else
+		printf("\nStack is full (OVERFLOW)");
+}
+
+void pop()
+{
+	int ele;
+	if(s.top==-1)
+	{
+		printf("\nStack empty (UNDERFLOW)");
+		return;
+	}
+	ele=s.a[s.top];
+	printf("\nthe deleted element is %d",ele);
+	s.top--;
+	return;
+}
+
+void display()
+{
+	if(s.top==-1)
+	{
+		printf("\nStack is empty");
+		return;
+	}
+	printf("\nStack elements: ");
+	for (int i=0; i<=s.top; i++)
+	{
+		printf("%d ",s.a[i]);
+	}
+}
+
+void main()
+{
+	s.top=-1;
+	int choice,x;
+	do
+	{
+		printf("\nMenu:\n1. Insert\n2. Delete\n3. Display\n4. Exit\nChoose your option: ");
+		scanf("%d",&choice);
+		switch(choice)
+		{
+		case 1:
+		{
+			printf("Enter the value of the element to be inserted: ");
+			scanf("%d",&x);
+			push(x);
+			display();
+			break;
+		}
+
+		case 2:
+			pop();
+			display();
+			break;
+
+		case 3:
+			display();
+			break;
+
+		case 4:
+			printf("\nExiting the program...");
+			break;
+
+		default:
+			printf("\nInvalid input");
+
+		}
+	}
+	while(choice!=4);
+}

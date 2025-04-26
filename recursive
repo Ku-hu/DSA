@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+int fibonacci(int n)
+{
+	if (n<=1)
+		return n;
+	else
+		return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int fact(int n)
+{
+	if (n<=1)
+		return 1;
+	else
+		return n*fact(n-1);
+}
+
+int main()
+{
+	int choice,n,i;
+	do
+	{
+		printf("\nMenu:\n1. Fibonacci Series\n2. Factorial\n3. Exit\nEnter your choice: ");
+		scanf("%d",&choice);
+		switch(choice)
+		{
+		case 1:
+			printf("Enter a number: ");
+			scanf("%d",&n);
+			printf("Fibonacci Series:\n");
+			for (i = 0; i < n; i++) {
+				printf("%d\n", fibonacci(i));
+			}
+			break;
+
+		case 2:
+			printf("Enter a number: ");
+			scanf("%d", &n);
+			if (n < 0)
+			{
+				printf("Factorial is not defined for negative numbers\n");
+			}
+			else
+			{
+				printf("Factorial of %d is %d\n", n, fact(n));
+			}
+			break;
+
+		case 3:
+			printf("Exiting");
+			break;
+		default:
+			printf("\nInvalid Input");
+		}
+	} while(choice!=3);
+	return 0;
+}

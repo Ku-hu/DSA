@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+	int data;
+	struct Node* prev;
+	struct Node* next;
+};
+
+struct Node* front = NULL;
+struct Node* rear = NULL;
+void enqueue_f(int data) {
+	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+	newNode->data = data;
+	newNode->prev = NULL;
+	newNode->next = front;
+	if (front == NULL) {
+		rear = newNode;
+	} else {
+		front->prev = newNode;
+	}
+	front = newNode;
+} 
+
+void enqueue(int data) {
+	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+	newNode->data = data;
+	newNode->next = NULL;
+	newNode->prev = rear;
+	if (rear == NULL) {
+		front = newNode;
+	} else {
+		rear->next = newNode;
+	}
+	rear = newNode;
+}
+
+void dequeue_f() {
+	if (front == NULL) {
+		printf("Deque is empty!\n");
+		return;
+	}
+	struct Node* temp = front;
+	front = front->next;
+	if (front == NULL) {
+		rear = NULL;
+	} else {
+		front->prev = NULL;
+	}
+	free(temp);
+}
+
+void dequeue() {
+	if (rear == NULL) {
+		printf("Deque is empty!\n");
+		return;
+	}
+	struct Node* temp = rear;
+	rear = rear->prev;
+	if (rear == NULL) {
+		front = NULL;
+	} else {
+		rear->next = NULL;
+	}
+	free(temp);
+}
+
+void display() {
+	struct Node* temp = front;
+	if (temp == NULL) {
+		printf("Deque is empty!\n");
+		return;
+	}
+	printf("Deque: ");
+	while (temp != NULL) {
+		printf("%d ", temp->data);
+		temp = temp->next;
+	}
+	printf("\n");
+}
+
+void main() {
+	int choice, value;
+	do {
+		printf("\nMenu:\n");
+		printf("1. Enqueue \n");
+		printf("2. Dequeue \n");
+		printf("3. Enqueue at front\n");
+		printf("4. Dequeue at front\n");
+		printf("5. Display\n");
+		printf("6. Exit\n");
+		printf("Enter your choice: ");
+		scanf("%d", &choice);
+		switch (choice) {
+		case 1:
+			printf("Enter value to enqueue at rear: ");
+			scanf("%d", &value);
+			enqueue(value);
+			break;
+		case 2:
+			dequeue();
+			break;
+		case 3:
+			printf("Enter value to enqueue at front: ");
+			scanf("%d", &value);
+			enqueue_f(value);
+			break;
+		case 4:
+			dequeue_f();
+			break;
+		case 5:
+			display();
+			break;
+		case 6:
+			printf("Exiting...\n");
+			break;
+		default:
+			printf("Invalid choice! Try again.\n");
+		}
+	} while (choice != 6);
+}

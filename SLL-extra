@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Search for an element
+int search(struct Node* head, int value) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        if (temp->data == value) {
+            return 1;
+        }
+        temp = temp->next;
+    }
+    return 0;
+}
+
+// Count the number of nodes
+int countNodes(struct Node* head) {
+    int count = 0;
+    struct Node* temp = head;
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+// Display the list
+void display(struct Node* head) {
+    struct Node* temp = head;
+    if (temp == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    printf("\nLinked List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Reverse Traversal without recursion
+void reverseTraversal(struct Node* head) {
+    if (head == NULL) {
+        return;
+    }
+
+    struct Node* temp = head;
+    struct Node* stack[100]; // Stack to hold nodes
+    int top = -1;
+
+    // Push all nodes onto the stack
+    while (temp != NULL) {
+        stack[++top] = temp;
+        temp = temp->next;
+    }
+
+    // Pop from stack and print in reverse order
+    printf("\nReverse Traversal: ");
+    while (top >= 0) {
+        printf("%d -> ", stack[top--]->data);
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* myList = NULL;
+    int choice, value;
+
+    do {
+        printf("\nMenu:\n");
+        printf("5. Search for an element\n");
+        printf("6. Count the number of nodes\n");
+        printf("7. Reverse Traversal\n");
+        printf("8. Display\n");
+        printf("9. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 5:
+                printf("Enter value to search: ");
+                scanf("%d", &value);
+                if (search(myList, value)) {
+                    printf("Element found\n");
+                } else {
+                    printf("Element not found\n");
+                }
+                break;
+
+            case 6:
+                printf("Number of nodes: %d\n", countNodes(myList));
+                break;
+
+            case 7:
+                reverseTraversal(myList);
+                break;
+
+            case 8:
+                display(myList);
+                break;
+
+            case 9:
+                printf("Exiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    } while (choice != 9);
+
+    return 0;
+}

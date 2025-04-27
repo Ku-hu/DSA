@@ -1,0 +1,131 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* front = NULL;
+struct Node* rear = NULL;
+
+// Insert at the front (beginning)
+void enqueue_f(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = front;
+    front = newNode;
+    if (rear == NULL) {
+        rear = newNode; // If the list was empty, set rear to new node as well
+    }
+}
+
+// Insert at the rear (end)
+void enqueue(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (rear == NULL) {
+        front = rear = newNode; // If the list was empty, both front and rear point to the new node
+    } else {
+        rear->next = newNode;
+        rear = newNode;
+    }
+}
+
+// Delete from the front (beginning)
+void dequeue_f() {
+    if (front == NULL) {
+        printf("Deque is empty!\n");
+        return;
+    }
+    struct Node* temp = front;
+    front = front->next;
+    if (front == NULL) {
+        rear = NULL; // If the list becomes empty after the operation, set rear to NULL
+    }
+    free(temp);
+}
+
+// Delete from the rear (end)
+void dequeue() {
+    if (rear == NULL) {
+        printf("Deque is empty!\n");
+        return;
+    }
+
+    if (front == rear) {  // If there is only one element in the list
+        free(front);
+        front = rear = NULL;
+        return;
+    }
+
+    struct Node* temp = front;
+    while (temp->next != rear) {
+        temp = temp->next;
+    }
+
+    free(rear);
+    rear = temp;
+    rear->next = NULL;
+}
+
+// Display the list
+void display() {
+    struct Node* temp = front;
+    if (temp == NULL) {
+        printf("Deque is empty!\n");
+        return;
+    }
+    printf("Deque: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    int choice, value;
+    do {
+        printf("\nMenu:\n");
+        printf("1. Enqueue at rear\n");
+        printf("2. Dequeue from rear\n");
+        printf("3. Enqueue at front\n");
+        printf("4. Dequeue from front\n");
+        printf("5. Display\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to enqueue at rear: ");
+                scanf("%d", &value);
+                enqueue(value);
+                break;
+            case 2:
+                dequeue();
+                break;
+            case 3:
+                printf("Enter value to enqueue at front: ");
+                scanf("%d", &value);
+                enqueue_f(value);
+                break;
+            case 4:
+                dequeue_f();
+                break;
+            case 5:
+                display();
+                break;
+            case 6:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    } while (choice != 6);
+
+    return 0;
+}

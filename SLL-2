@@ -1,0 +1,176 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Insert at a specific position
+struct Node* insertAtPosition(struct Node* head, int value, int position) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+
+    if (position == 1) {
+        newNode->next = head;
+        head = newNode;
+        return head;
+    }
+
+    struct Node* temp = head;
+    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of bounds!\n");
+        free(newNode);
+        return head;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+    return head;
+}
+
+// Delete a node at a specific position
+struct Node* deleteAtPosition(struct Node* head, int position) {
+    if (head == NULL) {
+        printf("List is empty!\n");
+        return head;
+    }
+
+    struct Node* temp = head;
+    if (position == 1) {
+        head = temp->next;
+        free(temp);
+        return head;
+    }
+
+    struct Node* prev = NULL;
+    for (int i = 1; i < position && temp != NULL; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of bounds!\n");
+        return head;
+    }
+
+    prev->next = temp->next;
+    free(temp);
+    return head;
+}
+
+// Insert after an element
+struct Node* insertAfterElement(struct Node* head, int value, int element) {
+    struct Node* temp = head;
+    while (temp != NULL && temp->data != element) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Element %d not found!\n", element);
+        return head;
+    }
+
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = temp->next;
+    temp->next = newNode;
+    return head;
+}
+
+// Delete after an element
+struct Node* deleteAfterElement(struct Node* head, int element) {
+    struct Node* temp = head;
+    while (temp != NULL && temp->data != element) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL || temp->next == NULL) {
+        printf("Element %d not found or no element to delete after it!\n", element);
+        return head;
+    }
+
+    struct Node* nodeToDelete = temp->next;
+    temp->next = nodeToDelete->next;
+    free(nodeToDelete);
+    return head;
+}
+
+// Display the list
+void display(struct Node* head) {
+    struct Node* temp = head;
+    if (temp == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    printf("\nLinked List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* myList = NULL;
+    int choice, value, position, element;
+
+    do {
+        printf("\nMenu:\n");
+        printf("1. Insert at specific position\n");
+        printf("2. Delete at specific position\n");
+        printf("3. Insert after an element\n");
+        printf("4. Delete after an element\n");
+        printf("5. Display\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                printf("Enter position to insert at: ");
+                scanf("%d", &position);
+                myList = insertAtPosition(myList, value, position);
+                break;
+
+            case 2:
+                printf("Enter position to delete from: ");
+                scanf("%d", &position);
+                myList = deleteAtPosition(myList, position);
+                break;
+
+            case 3:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                printf("Enter element after which to insert: ");
+                scanf("%d", &element);
+                myList = insertAfterElement(myList, value, element);
+                break;
+
+            case 4:
+                printf("Enter element after which to delete: ");
+                scanf("%d", &element);
+                myList = deleteAfterElement(myList, element);
+                break;
+
+            case 5:
+                display(myList);
+                break;
+
+            case 6:
+                printf("Exiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    } while (choice != 6);
+
+    return 0;
+}

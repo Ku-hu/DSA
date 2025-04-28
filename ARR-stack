@@ -7,9 +7,9 @@ struct stack
 	int top;
 } s;
 
-void push(int x);
-void pop();
-void display();
+//void push(int x);
+//void pop();
+//void display();
 
 void push(int x)
 {
@@ -31,8 +31,8 @@ void pop()
 		printf("\nStack empty (UNDERFLOW)");
 		return;
 	}
-	ele=s.a[s.top];
-	printf("\nthe deleted element is %d",ele);
+	//ele=s.a[s.top];
+	//printf("\nthe deleted element is %d",ele);
 	s.top--;
 	return;
 }
@@ -44,10 +44,10 @@ void display()
 		printf("\nStack is empty");
 		return;
 	}
-	printf("\nStack elements: ");
-	for (int i=0; i<=s.top; i++)
+	printf("\nStack elements:\n");
+	for (int i=s.top; i>=0; i--)
 	{
-		printf("%d ",s.a[i]);
+		printf("%d \n",s.a[i]);
 	}
 }
 
@@ -57,7 +57,7 @@ void main()
 	int choice,x;
 	do
 	{
-		printf("\nMenu:\n1. Insert\n2. Delete\n3. Display\n4. Exit\nChoose your option: ");
+		printf("\nMenu:\n1. Push\n2. Pop\n3. Display\n4. Exit\nChoose your option: ");
 		scanf("%d",&choice);
 		switch(choice)
 		{

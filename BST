@@ -23,9 +23,10 @@ struct node *insert(struct node *root, int n) {
 		temp->right=insert(temp->right,n);
 	else
 	{
+		printf("Element already exists");
+		free(new);
 	}
-	printf("Element already exists");
-	free(new);
+	
 	return root;
 }
 struct node *delete(struct node *root, int m)

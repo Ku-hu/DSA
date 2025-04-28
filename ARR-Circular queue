@@ -1,96 +1,95 @@
-#include<stdio.h>
-#define MAX 5
-struct queue
-{
-	int front,rear,a[MAX];
-} q;
-void display();
+#include <stdio.h>
+#include <stdlib.h>
 
-void enqueue()
-{
-	int n;
-	if((q.rear+1)%MAX==q.front)
-		printf("\nQueue is full");
-	else
-	{
-		printf("\nEnter the element:");
-		scanf("%d",&n);
-		if(q.rear==-1 && q.front==-1)
-		{
-			q.front=0;
-			q.rear=0;
-		}
-		else
-		{
-			q.rear=(q.rear+1)%MAX;
-		}
-		q.a[q.rear]=n;
-		display();
-	}
+struct ll_node {
+    int data;
+    struct ll_node *next;
+    struct ll_node *prev;
+};
+
+struct ll_node *insert(struct ll_node *list, int value);
+struct ll_node *del(struct ll_node *list, int target);
+void display(struct ll_node *list);
+
+void main() {
+    struct ll_node *myList = NULL;
+    int choice, value;
+    while (1) {
+        printf("\n1.Insert\n2.Delete\n3.Display\n4.Exit\nEnter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                printf("Enter the value to be inserted: ");
+                scanf("%d", &value);
+                myList = insert(myList, value);
+                break;
+            case 2:
+                printf("Enter the value to be deleted: ");
+                scanf("%d", &value);
+                myList = del(myList, value);
+                break;
+            case 3:
+                display(myList);
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
 }
 
-void dequeue()
-{
-	int n;
-	if(q.rear==-1 && q.front==-1)
-		printf("\nqueue is Empty");
-	else
-	{
-		n=q.a[q.front];
-		printf("\nDeleted element:%d",n);
-		if(q.rear==q.front)
-		{
-			q.rear=-1,q.front=-1;
-		}
-		else
-		{
-			q.front=(q.front+1)%MAX;
-		}
-	}
+// Insert at the end (simplified insertion)
+struct ll_node *insert(struct ll_node *list, int value) {
+    struct ll_node *newNode = (struct ll_node *)malloc(sizeof(struct ll_node));
+    newNode->data = value;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+
+    if (list == NULL) {
+        return newNode;
+    }
+
+    struct ll_node *temp = list;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->prev = temp;
+
+    return list;
 }
 
-void display()
-{
-	if(q.rear==-1 && q.front==-1)
-		printf("\nqueue is Empty");
-	else
-	{
-		int i=q.front;
-		printf("\nCircular queue elements:\n");
-		while( i!=q.rear)
-		{
-			printf("%d\n",q.a[i]);
-			i=(i+1)%MAX;
-		}
-		printf("%d",q.a[i]);
-	}
+// Delete first occurrence of target
+struct ll_node *del(struct ll_node *list, int target) {
+    struct ll_node *temp = list;
+
+    while (temp != NULL) {
+        if (temp->data == target) {
+            if (temp->prev != NULL) {
+                temp->prev->next = temp->next;
+            } else {
+                list = temp->next; // Deleted head node
+            }
+            if (temp->next != NULL) {
+                temp->next->prev = temp->prev;
+            }
+            free(temp);
+            printf("Element %d deleted\n", target);
+            return list;
+        }
+        temp = temp->next;
+    }
+    printf("Element not found\n");
+    return list;
 }
 
-int main()
-{
-	int choice=0;
-	q.front=-1,q.rear=-1;
-	while(choice!=4)
-	{
-		printf("\n1.Enqueue\n2.Dequeue\n3.Display\n4.Exit\nEnter your choice:");
-		scanf("%d",&choice);
-		switch(choice)
-		{
-		case 1:
-			enqueue();
-			break;
-		case 2:
-			dequeue();
-			break;
-		case 3:
-			display();
-			break;
-		case 4:
-			printf("\nExiting");
-			break;
-		default:
-			printf("\nInvalid choice");
-			break;
-		}
-	}
+void display(struct ll_node *list) {
+    struct ll_node *temp = list;
+    printf("\nList: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
 }

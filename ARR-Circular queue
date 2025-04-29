@@ -56,20 +56,19 @@ void dequeue()
 void display()
 {
     int i;
-    if (s.front == -1 && s.rear == -1) 
-  	{
+    if (s.front == -1 && s.rear == -1) {
         printf("ARRAY IS EMPTY!!!\n");
     } 
     else
 	  {
-        printf("Queue Elements: \n");
-        i = s.front;
-        do 
-		    {
-            printf(" %d", s.arr[i]);
-            i = (i + 1) % MAX;
-        } while (i != (s.rear + 1) % MAX);   
-        printf("\n");
+        	printf("Queue Elements: \n");
+        	i = s.front;
+       		do 
+					{
+								printf(" %d", s.arr[i]);
+            		i = (i + 1) % MAX;
+        	} while (i != (s.rear + 1) % MAX);   
+        	printf("\n");
     }	
 }
 
@@ -109,8 +108,5 @@ int main()
 
 
            }
-
-
-
      }while(choice!=4);
 }

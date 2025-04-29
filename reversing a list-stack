@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for both Linked List and Stack
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Stack functions
+void push(struct Node** top, int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = *top;
+    *top = newNode;
+}
+
+int pop(struct Node** top) {
+    if (*top == NULL) {
+        printf("Stack underflow\n");
+        return -1;
+    }
+    int val = (*top)->data;
+    struct Node* temp = *top;
+    *top = (*top)->next;
+    free(temp);
+    return val;
+}
+
+// Linked List functions
+void insertEnd(struct Node** head, int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct Node* temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+}
+
+void display(struct Node* head) {
+    struct Node* temp = head;
+    printf("List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Reverse using Stack
+void reverseList(struct Node** head) {
+    struct Node* stack = NULL;
+    struct Node* temp = *head;
+
+    while (temp != NULL) {
+        push(&stack, temp->data);
+        temp = temp->next;
+    }
+
+    temp = *head;
+    while (stack != NULL) {
+        temp->data = pop(&stack);
+        temp = temp->next;
+    }
+}
+
+void main() {
+    struct Node* myList = NULL;
+    int choice, val;
+
+    while (1) {
+        printf("\nMenu:\n1. Insert\n2. Display\n3. Reverse List\n4. Exit\nEnter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &val);
+                insertEnd(&myList, val);
+                break;
+            case 2:
+                display(myList);
+                break;
+            case 3:
+                reverseList(&myList);
+                printf("List reversed.\n");
+                display(myList);
+                break;
+            case 4:
+                printf("Exiting...\n");
+                exit(0);
+            default:
+                printf("Invalid choice.\n");
+        }
+    }
+}
+

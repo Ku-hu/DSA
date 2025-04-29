@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+
+// Insert at the end
+struct Node* insert(struct Node* head, int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+
+    if (head == NULL) {
+        return newNode;
+    }
+
+    struct Node* temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+
+    temp->next = newNode;
+    newNode->prev = temp;
+    return head;
+}
+
+// Delete by value
+struct Node* delete(struct Node* head, int value) {
+    struct Node* temp = head;
+
+    while (temp != NULL) {
+        if (temp->data == value) {
+            if (temp->prev != NULL)
+                temp->prev->next = temp->next;
+            else
+                head = temp->next;
+
+            if (temp->next != NULL)
+                temp->next->prev = temp->prev;
+
+            free(temp);
+            printf("Deleted %d\n", value);
+            return head;
+        }
+        temp = temp->next;
+    }
+
+    printf("Value %d not found!\n", value);
+    return head;
+}
+
+// Display the list
+void display(struct Node* head) {
+    struct Node* temp = head;
+    if (temp == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+
+    printf("List: ");
+    while (temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* myList = NULL;
+    int choice, value;
+
+    while (1) {
+        printf("\n1. Insert\n2. Delete\n3. Display\n4. Exit\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                myList = insert(myList, value);
+                break;
+
+            case 2:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                myList = delete(myList, value);
+                break;
+
+            case 3:
+                display(myList);
+                break;
+
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+}

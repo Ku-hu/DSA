@@ -15,26 +15,16 @@ struct Node* insert(struct Node* head, int value) {
     return head;
 }
 
-// Delete a node by value
-struct Node* delete(struct Node* head, int value) {
-    struct Node* temp = head;
-    struct Node* prev = NULL;
-
-    while (temp != NULL) {
-        if (temp->data == value) {
-            if (prev == NULL) {
-                head = temp->next;
-            } else {
-                prev->next = temp->next;
-            }
-            free(temp);
-            printf("Deleted %d\n", value);
-            return head;
-        }
-        prev = temp;
-        temp = temp->next;
+// Delete from beginning
+struct Node* delete(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty, nothing to delete.\n");
+        return head;
     }
-    printf("Value not found!\n");
+    struct Node* temp = head;
+    head = head->next;
+    printf("Deleted %d\n", temp->data);
+    free(temp);
     return head;
 }
 
@@ -58,7 +48,7 @@ int main() {
     int choice, value;
 
     do {
-        printf("\nMenu:\n1. Insert\n2. Delete\n3. Display\n4. Exit\nEnter your choice: ");
+        printf("\nMenu:\n1. Insert\n2. Delete from Beginning\n3. Display\n4. Exit\nEnter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
@@ -69,9 +59,7 @@ int main() {
                 break;
 
             case 2:
-                printf("Enter value to delete: ");
-                scanf("%d", &value);
-                myList = delete(myList, value);
+                myList = delete(myList);
                 break;
 
             case 3:

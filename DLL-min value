@@ -8,7 +8,7 @@ struct Node {
     struct Node* next;
 };
 
-// Function to create a new node
+// Create a new node
 struct Node* createNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
@@ -30,12 +30,12 @@ void insertEnd(struct Node** head, int data) {
     newNode->prev = temp;
 }
 
-// Delete node after node with given value
+// Delete node after given value
 void deleteAfterValue(struct Node* head, int value) {
     struct Node* temp = head;
-    while (temp != NULL && temp->data != value)
+    while (temp && temp->data != value)
         temp = temp->next;
-    
+
     if (temp == NULL || temp->next == NULL) {
         printf("Deletion not possible after value %d.\n", value);
         return;
@@ -66,16 +66,45 @@ int findSmallest(struct Node* head) {
     return min;
 }
 
-// Display list
+// Count even value nodes
+int countEven(struct Node* head) {
+    int count = 0;
+    while (head) {
+        if (head->data % 2 == 0)
+            count++;
+        head = head->next;
+    }
+    return count;
+}
+
+// Display forward
 void display(struct Node* head) {
     if (head == NULL) {
         printf("List is empty.\n");
         return;
     }
-    printf("List: ");
+    printf("List (Forward): ");
     while (head) {
         printf("%d <-> ", head->data);
         head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// Display in reverse
+void displayReverse(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    // Move to last node
+    while (head->next)
+        head = head->next;
+
+    printf("List (Reverse): ");
+    while (head) {
+        printf("%d <-> ", head->data);
+        head = head->prev;
     }
     printf("NULL\n");
 }
@@ -90,8 +119,10 @@ int main() {
         printf("1. Insert node at end\n");
         printf("2. Delete node after given value\n");
         printf("3. Find the smallest value\n");
-        printf("4. Display list\n");
-        printf("5. Exit\n");
+        printf("4. Display list (forward)\n");
+        printf("5. Count even value nodes\n");
+        printf("6. Display list in reverse\n");
+        printf("7. Exit\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
@@ -115,12 +146,18 @@ int main() {
             display(head);
             break;
         case 5:
+            printf("Number of even value nodes: %d\n", countEven(head));
+            break;
+        case 6:
+            displayReverse(head);
+            break;
+        case 7:
             printf("Exiting program.\n");
             break;
         default:
             printf("Invalid choice! Try again.\n");
         }
-    } while (choice != 5);
+    } while (choice != 7);
 
     return 0;
 }

@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = newNode->next = NULL;
+    return newNode;
+}
+
+// Insert at end
+void insertEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next)
+        temp = temp->next;
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+// Delete node after node with given value
+void deleteAfterValue(struct Node* head, int value) {
+    struct Node* temp = head;
+    while (temp != NULL && temp->data != value)
+        temp = temp->next;
+    
+    if (temp == NULL || temp->next == NULL) {
+        printf("Deletion not possible after value %d.\n", value);
+        return;
+    }
+
+    struct Node* toDelete = temp->next;
+    temp->next = toDelete->next;
+    if (toDelete->next)
+        toDelete->next->prev = temp;
+
+    free(toDelete);
+    printf("Node deleted after value %d.\n", value);
+}
+
+// Find smallest value
+int findSmallest(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return -1;
+    }
+    int min = head->data;
+    struct Node* temp = head->next;
+    while (temp) {
+        if (temp->data < min)
+            min = temp->data;
+        temp = temp->next;
+    }
+    return min;
+}
+
+// Display list
+void display(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    printf("List: ");
+    while (head) {
+        printf("%d <-> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// Main - menu driven
+int main() {
+    struct Node* head = NULL;
+    int choice, data, val;
+
+    do {
+        printf("\n--- MENU ---\n");
+        printf("1. Insert node at end\n");
+        printf("2. Delete node after given value\n");
+        printf("3. Find the smallest value\n");
+        printf("4. Display list\n");
+        printf("5. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter value to insert: ");
+            scanf("%d", &data);
+            insertEnd(&head, data);
+            break;
+        case 2:
+            printf("Enter value after which to delete: ");
+            scanf("%d", &val);
+            deleteAfterValue(head, val);
+            break;
+        case 3:
+            val = findSmallest(head);
+            if (val != -1)
+                printf("Smallest value: %d\n", val);
+            break;
+        case 4:
+            display(head);
+            break;
+        case 5:
+            printf("Exiting program.\n");
+            break;
+        default:
+            printf("Invalid choice! Try again.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
